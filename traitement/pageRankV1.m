@@ -18,7 +18,25 @@ end
 
 %fprintf('%d fichiers trouvés pour traitement.\n', N);
 
+% Initialisation du dictionnaire
+indexMap = struct();
+
 for i = 1:N
-  files{i}
+    % Nom du fichier (ex: "file1.txt")
+    fname = files{i};
+
+    % Normalisation pour en faire un champ valide
+    % "file1.txt" -> "file1_txt"
+    key = strrep(fname, '.txt', '');
+
+    % Stockage de la correspondance
+    indexMap.(key) = i;
 end
+
+txt = cell(1, N);
+for i = 1:N
+  txt{i} = fileread(fullfile(data_dir, files{i}));
+end
+
+txt
 
