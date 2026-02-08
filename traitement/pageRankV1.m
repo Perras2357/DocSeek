@@ -90,5 +90,28 @@ M_google = (d * M_transition) + ((1-d)/N);
 
 %construction du vecteur propre
 [E,D] = eig(M_google);
-t = E(:,1)/sum(E(:,1));
-sum(t)
+
+% indice de la valeur propre ≈ 1
+lambda = diag(D);
+[~, idx] = min(abs(lambda - 1));
+r = E(:, idx);
+r = r / sum(r);
+[maxScore, bestIndex] = max(r);
+
+files(bestIndex)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
