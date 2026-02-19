@@ -1,6 +1,13 @@
-function [files, contents, indexMap, N] = chargerFichiers(data_dir)
-    % Liste des fichiers .txt
-    listeStruct = dir(fullfile(data_dir, "*.txt"));
+function [files, contents] = chargerFichiers(data_dir)
+    % chargerFichiers - liste les .txt et charge leur contenu
+    %
+    % OUTPUT:
+    %   files    : cell array {"file1.txt","file2.txt",...}
+    %   contents : cell array contenu texte correspondant
+
+    pattern = fullfile(data_dir, "*.txt");
+    listeStruct = dir(pattern);
+
     files = {listeStruct.name};
     N = numel(files);
 
@@ -8,21 +15,10 @@ function [files, contents, indexMap, N] = chargerFichiers(data_dir)
         error('Aucun fichier .txt trouvé dans : %s', data_dir);
     end
 
-    % Pour des tests reproductibles : ordre stable
-    files = sort(files);
-
-    % Lire le contenu de chaque fichier
-    contents = cell(N, 1);
+    contents = cell(N,1);
     for i = 1:N
         path = fullfile(data_dir, files{i});
         contents{i} = fileread(path);
-    end
-
-    % Construire le mapping "nom sans extension" -> index
-    indexMap = struct();
-    for i = 1:N
-        key = strrep(files{i}, ".txt", "");  % ex: "file1"
-        indexMap.(key) = i;
     end
 end
 

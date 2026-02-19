@@ -1,12 +1,42 @@
-data_dir = "../data";
-[files, contents, indexMap, N] = chargerFichiers(data_dir);
+%% main.m - Point d'entrée
+%clear; clc;
 
-assert(N > 0);
-assert(numel(files) == N);
-assert(numel(contents) == N);
+data_dir = fullfile(pwd, 'data'); % dossier data/ au même niveau que main.m
+d = 0.85;
 
-% Chaque contenu doit être une chaîne non vide (au moins existante)
-for i = 1:N
-    assert(ischar(contents{i}) || isstring(contents{i}));
+% 1) Charger les fichiers
+[files, contents] = chargerFichiers(data_dir);
+
+% 2) Construire outLinks + indexMap
+[outLinks, indexMap] = construireOutLinks(files, contents);
+[outLinks, indexMap] = construireOutLinks(files, contents);
+disp(outLinks);
+disp(fieldnames(indexMap));
+
+
+% 3) Matrice de transition
+M = construireMatriceTransition(outLinks, numel(files));
+
+% 4) Matrice Google
+G = construireMatriceGoogle(M, d);
+
+% 5) PageRank
+r = calculerPageRank(G);  % version eig ou power iteration, au choix
+
+
+
+% 7) Recherche + tri
+query = input('Mot recherché (vide pour ignorer) : ', 's');
+if ~isempty(strtrim(query))
+    ranked = rechercherEtClasser(files, contents, r, query);
+    if isempty(ranked)
+        disp("Aucun fichier ne contient ce mot.");
+    else
+        disp("=== Résultats (filtrés + triés par PageRank) ===");
+        for k = 1:numel(ranked)
+            i = ranked(k);
+            fprintf('%d) %s  score=%.6f\n', k, files{i}, r(i));
+        end
+    end
 end
 
