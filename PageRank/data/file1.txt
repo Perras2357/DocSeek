@@ -1,0 +1,1 @@
+texte du fichier 1 qui reférence sur le fichier 2. [pointeur](file2)
