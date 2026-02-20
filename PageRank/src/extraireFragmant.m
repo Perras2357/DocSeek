@@ -1,4 +1,4 @@
-function fragmant = extrairefragmant(contenu, highlightTokens, windowSize)
+function fragmant = extraireFragmant(contenu, highlightTokens, windowSize)
     % extrait un fagmant de mots autour de la meilleure zone
     % contenant le plus de mots de la requête.
     %
