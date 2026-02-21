@@ -2,11 +2,11 @@
 clear; clc;
 
 addpath('src'); % Ajoute le dossier contenant les fonctions
--
--% récupération de l'emplacement du main et fonction récupère le repertoire data
--currentFile = mfilename('fullpath');
--[projectRoot,~,~] = fileparts(currentFile);
--data_dir = fullfile(projectRoot, 'data');
+
+% récupération de l'emplacement du main et fonction récupère le repertoire data
+currentFile = mfilename('fullpath');
+[projectRoot,~,~] = fileparts(currentFile);
+data_dir = fullfile(projectRoot, 'data');
 
 d = 0.85;
 
@@ -34,7 +34,7 @@ if ~isempty(strtrim(query))
     if isempty(ranked)
         disp("Aucun fichier ne correspond à cette requête.");
     else
-        disp("=== Résultats (triés par nb de mots matchés puis PageRank) ===");
+        disp("=== Fichiers contenant le mot recherché classé ===");
         for k = 1:numel(ranked)
             i = ranked(k);
             fprintf('file -> %d) %s \n', k, files{i});

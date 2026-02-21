@@ -1,6 +1,5 @@
 function r = calculerPageRank(G)
     % calculerPageRank - calcule le vecteur stationnaire via eig
-    % Attention : O(N^3), ok pour petits N
 
     [E, D] = eig(G);
     lambda = diag(D);
@@ -9,13 +8,13 @@ function r = calculerPageRank(G)
     [~, idx] = min(abs(lambda - 1));
 
     r = E(:, idx);
-    r = real(r);        % nettoie bruit imaginaire
+    r = real(r);        % nettoie bruit
 
     if sum(r) < 0
-        r = -r;         % corrige signe global
+        r = -r;         % corrige signe
     end
 
-    r(r < 0) = 0;       % sécurité
+    r(r < 0) = 0;
     r = r / sum(r);     % normalise pour somme = 1
 end
 

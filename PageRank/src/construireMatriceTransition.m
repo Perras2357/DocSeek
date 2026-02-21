@@ -1,6 +1,5 @@
 function M = construireMatriceTransition(outLinks, N)
     % construireMatriceTransition
-    % M(i,j) = P(aller vers i | on est sur j)   => colonnes somment à 1
 
     M = zeros(N,N);
 
@@ -16,7 +15,7 @@ function M = construireMatriceTransition(outLinks, N)
         end
     end
 
-    % Check optionnel (débogage)
+    % Check
     colSums = sum(M, 1);
     if max(abs(colSums - 1)) > 1e-12
         warning("M_transition: certaines colonnes ne somment pas à 1.");

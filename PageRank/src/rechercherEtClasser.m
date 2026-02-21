@@ -1,4 +1,4 @@
-function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasserV2(files, contents, r, query)
+function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasser(files, contents, r, query)
     % - pertinence = nb de mots distincts de la requête trouvés
     % - tri : (1) pertinence desc, (2) PageRank desc
     %
