@@ -1,9 +1,5 @@
 function [files, contents] = chargerFichiers(data_dir)
     % chargerFichiers - liste les .txt et charge leur contenu
-    %
-    % OUTPUT:
-    %   files    : cell array {"file1.txt","file2.txt",...}
-    %   contents : cell array contenu texte correspondant
 
     pattern = fullfile(data_dir, "*.txt");
     listeStruct = dir(pattern);

@@ -6,7 +6,7 @@ function ranked = rechercherEtClasser(files, contents, r, query)
 
     matched = false(N,1);
     for i = 1:N
-        matched(i) = ~isempty(strfind(lower(contents{i}), q)); %#ok<STREMP>
+        matched(i) = ~isempty(strfind(lower(contents{i}), q));
     end
 
     candidates = find(matched);

@@ -1,1 +1,1 @@
-texte du fichier 2 qui reférence sur le fichier 1. [pointeur](file1)
+incroyable texte du fichier 2 qui reférence sur le fichier 1. [pointeur](file1)

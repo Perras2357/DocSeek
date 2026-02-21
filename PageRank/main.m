@@ -1,7 +1,13 @@
 %% main.m - Point d'entrée
-%clear; clc;
+clear; clc;
 
-data_dir = fullfile(pwd, 'data'); % dossier data/ au même niveau que main.m
+addpath('src'); % Ajoute le dossier contenant les fonctions
+
+% récupération de l'emplacement du main et fonction récupère le repertoire data
+currentFile = mfilename('fullpath');
+[projectRoot,~,~] = fileparts(currentFile);
+data_dir = fullfile(projectRoot, 'data');
+
 d = 0.85;
 
 % 1) Charger les fichiers
@@ -10,8 +16,6 @@ d = 0.85;
 % 2) Construire outLinks + indexMap
 [outLinks, indexMap] = construireOutLinks(files, contents);
 [outLinks, indexMap] = construireOutLinks(files, contents);
-disp(outLinks);
-disp(fieldnames(indexMap));
 
 
 % 3) Matrice de transition
@@ -21,7 +25,7 @@ M = construireMatriceTransition(outLinks, numel(files));
 G = construireMatriceGoogle(M, d);
 
 % 5) PageRank
-r = calculerPageRank(G);  % version eig ou power iteration, au choix
+r = calculerPageRank(G);
 
 
 
@@ -32,10 +36,10 @@ if ~isempty(strtrim(query))
     if isempty(ranked)
         disp("Aucun fichier ne contient ce mot.");
     else
-        disp("=== Résultats (filtrés + triés par PageRank) ===");
+        disp("=== Fichiers contenant le mot recherché classé ===");
         for k = 1:numel(ranked)
             i = ranked(k);
-            fprintf('%d) %s  score=%.6f\n', k, files{i}, r(i));
+            fprintf('file -> %d) %s \n', k, files{i});
         end
     end
 end

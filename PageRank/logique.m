@@ -1,7 +1,10 @@
 %% Importation du fichier txt
 
 %Repertoire où se trouve les fichiers
-data_dir = "../data/";
+currentFile = mfilename('fullpath');
+[projectRoot,~,~] = fileparts(currentFile);
+data_dir = fullfile(projectRoot, 'data');
+
 d = 0.85; % Damping google
 
 %Recherche des fichiers ayant pour extension .txt
