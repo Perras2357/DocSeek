@@ -28,18 +28,32 @@ r = calculerPageRank(G);
 
 % 6) Recherche + tri
 query = input('Mot recherché (vide pour ignorer) : ', 's');
+
 if ~isempty(strtrim(query))
-    ranked = rechercherEtClasser(files, contents, r, query);
+    [ranked, matchCount, bestMatchedTokens] = rechercherEtClasser(files, contents, r, query);
 
     if isempty(ranked)
         disp("Aucun fichier ne correspond à cette requête.");
     else
-        disp("=== Fichiers contenant le mot recherché classé ===");
+        qTokens = unique(tokeniserTexte(query));
+        disp("=== Fichiers contenant les mots recherchés classés ===");
         for k = 1:numel(ranked)
             i = ranked(k);
+
+            % tokens du doc
+            docTokens = unique(tokeniserTexte(contents{i}));
+
+            % mots de la requête présents dans ce doc
+            present = ismember(qTokens, docTokens);
+            matchedTokensDoc = qTokens(present);
+
             fprintf('file -> %d) %s \n', k, files{i});
+
+            fragmant = extraireFragmant(contents{i}, matchedTokensDoc, 17);
+            disp(fragmant);
+            disp(" "); % ligne vide pour lisibilité
         end
+
     end
 end
-
 
