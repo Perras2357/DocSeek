@@ -1,12 +1,12 @@
-function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasserV2(files, contents, r, query)
+function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasser(files, contents, r, query, stopWords)
     % - pertinence = nb de mots distincts de la requête trouvés
     % - tri : (1) pertinence desc, (2) PageRank desc
     %
 
     N = numel(files);
 
-    % Tokeniser la requête
-    qTokens = unique(tokeniserTexte(query));
+    % Tokeniser la requête (avec filtrage stop words)
+    qTokens = unique(tokeniserTexte(query, stopWords));
     if isempty(qTokens)
         ranked = [];
         matchCount = zeros(N,1);
@@ -18,7 +18,7 @@ function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasserV2(files, 
 
     % Calcul du score pour chaque doc
     for i = 1:N
-        docTokens = unique(tokeniserTexte(contents{i}));
+        docTokens = unique(tokeniserTexte(contents{i}, stopWords));
         present = ismember(qTokens, docTokens);
         matchCount(i) = sum(present);
     end
@@ -38,7 +38,7 @@ function [ranked, matchCount, bestMatchedTokens] = rechercherEtClasserV2(files, 
 
     % Extraire les mots matchés dans le meilleur doc (ranked(1))
     topIdx = ranked(1);
-    topTokens = unique(tokeniserTexte(contents{topIdx}));
+    topTokens = unique(tokeniserTexte(contents{topIdx}, stopWords));
     presentTop = ismember(qTokens, topTokens);
     bestMatchedTokens = qTokens(presentTop);
 end
