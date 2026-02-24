@@ -89,17 +89,35 @@ for j = 1:N
 end
 
 % construction de la matrice de google
-M_google = (d * M_transition) + ((1-d)/N)
+M_google = (d * M_transition) + ((1-d)/N);
 
 %construction du vecteur propre
 [E,D] = eig(M_google);
 
 % indice de la valeur propre ≈ 1
-lambda = diag(D)
+lambda = diag(D);
 [~, idx] = min(abs(lambda - 1));
 r = E(:, idx);
 r = r / sum(r);
-[maxScore, bestIndex] = max(r)
+[maxScore, bestIndex] = max(r);
 
-files(bestIndex)
+files(bestIndex);
 
+% 1. Trier les scores (r) par ordre décroissant
+% sortedScores contiendra les valeurs, sortedIdx contiendra l'ordre des indices
+[sortedScores, sortedIdx] = sort(r, 'descend');
+
+% 2. Affichage des résultats en console
+fprintf('\n======================================\n');
+fprintf('   CLASSEMENT PAGERANK (Damping = %.2f)\n', d);
+fprintf('======================================\n');
+
+for i = 1:N
+    % On récupère le nom du fichier correspondant à l'indice trié
+    fileName = files{sortedIdx(i)};
+    score = sortedScores(i);
+
+    % Affichage formaté : Rang. Nom du fichier : Score (en %)
+    fprintf('%d. %-15s : %.2f%%\n', i, fileName, score * 100);
+end
+fprintf('======================================\n');
