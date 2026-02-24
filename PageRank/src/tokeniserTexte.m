@@ -1,4 +1,4 @@
-function tokens = tokeniserTexte(txt)
+function tokens = tokeniserTexte(txt, stopWords)
     % tokeniserTexte - normalise et découpe un texte en mots (tokens)
     %
     % Règles :
@@ -12,6 +12,11 @@ function tokens = tokeniserTexte(txt)
         return;
     end
 
+    % nombre arguments de la fonction
+    if nargin < 2 || isempty(stopWords)
+        stopWords = {};
+    end
+
     txt = lower(txt);
 
     % Remplace tout ce qui n'est pas [a-z0-9] par des espaces.
@@ -22,5 +27,10 @@ function tokens = tokeniserTexte(txt)
 
     % enlever les vides
     tokens = tokens(~cellfun('isempty', tokens));
+
+    % Filtre les stop words
+    if ~isempty(stopWords)
+        tokens = tokens(~ismember(tokens, stopWords));
+    end
 end
 
