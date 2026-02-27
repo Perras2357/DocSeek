@@ -110,6 +110,12 @@ Pour le meilleur résultat :
 
     * meilleure précision sur requêtes naturelles
 
+#### Remarque 
+ Vous trouverez un jeu de données dans ce drive : [data-DocSeek](https://drive.google.com/drive/folders/1dRWoZwnUrjZczquFge0bXWuwygNukN45?usp=sharing)
+ dont le contexte est un ensemble d'installation d'outils pour un *HomeLab*.
+ 
+ **NB :** Renommer le repertoire `data/`
+
 
 
 
