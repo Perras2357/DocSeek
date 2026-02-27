@@ -1,47 +1,127 @@
 clear all
+% ==============================
+% Lecture des donnees
+% ==============================
 
-%lecture des données
-Matrice_data = load("techno_info.txt");
+X = load("techno_info.txt");
 
-%la matrice data contient des valeurs -1 correspondant à une absence des données
-%les valeurs manquantes sont remplacées par la moyenne de la variable correspondate
-%afin de ne pas biaiaser les calculs statistiques
+% Noms des 15 secteurs (donné dans l'exercice)
+secteurs = {
+    "InP"
+    "InC"
+    "InG"
+    "InA"
+    "Tfi"
+    "TSF"
+    "Tsa"
+    "Taa"
+    "Wth"
+    "Wpi"
+    "Wap"
+    "Wau"
+    "Roe"
+    "Rec"
+    "Rgp"
+};
 
-for j = 1:size(Matrice_data,2)
-    col = Matrice_data(:,j);
-    col(col == -1) = mean(col(col ~= -1));
-    Matrice_data(:,j) = col;
+% ==============================
+% ACP 1 : Donnees brutes 
+% ==============================
+
+Xc = X - mean(X);          % centrage
+Xs = Xc ./ std(Xc);        % reduction
+
+n = size(Xs,1);            % nombre d'observations
+M = (Xs' * Xs)/(n-1);      % matrice de covariance
+
+[E,D] = eig(M);            % valeurs/vecteurs propres
+[valeurs_propres, ordre] = sort(diag(D),"descend");
+E = E(:,ordre);
+
+P1 = Xs * E;               % projection
+
+figure
+scatter(P1(:,1),P1(:,2),60,"filled")
+hold on
+for i=1:length(secteurs)
+    text(P1(i,1)+0.2,P1(i,2),secteurs{i})
+end
+title("ACP 1 - Donnees brutes")
+xlabel("Axe 1")
+ylabel("Axe 2")
+grid on
+hold off
+
+
+% ==============================
+% ACP 2 : Apres remplacement des -1
+% ==============================
+
+X_corr = X;
+
+for j=1:size(X_corr,2)
+    col = X_corr(:,j);
+    if any(col == -1)
+        col(col == -1) = mean(col(col ~= -1));
+    end
+    X_corr(:,j) = col;
 end
 
-%centrage des données
-%chaque variable est recentrée pour avoir une moyenne nulle
-Xc= Matrice_data - mean(Matrice_data);
-
-
-%standardisation (centrage + réduction)
-%les variables sont rendues sans dimension avec une variance égale à 1
+Xc = X_corr - mean(X_corr);
 Xs = Xc ./ std(Xc);
 
-%calcul de M (matrice de variance-covariance)
 n = size(Xs,1);
 M = (Xs' * Xs)/(n-1);
 
-% Diagonalisation de M : E= matrice des vecteurs propres et D matirce des valeurs propres
 [E,D] = eig(M);
+[valeurs_propres, ordre] = sort(diag(D),"descend");
+E = E(:,ordre);
 
+P2 = Xs * E;
 
-%Tri des valeurs propres par ordre decroissant afin d'identifier les axes principaux de l'ACP
-[valeurs_propres, ordre] = sort(diag(D), 'descend');
-D = diag(valeurs_propres);
-E = E(:, ordre);
-
-%calcul de la matrice de passage P
-%dans le but de projeter
-P=Xs * E;
-
-% Representation du plan factoriel (axes 1 et 2)
-plot(P(:,1), P(:,2), 'o');
-xlabel('Axe 1');
-ylabel('Axe 2');
-title('ACP – Économie du secteur des technologies de l’information');
+figure
+scatter(P2(:,1),P2(:,2),60,"filled")
+hold on
+for i=1:length(secteurs)
+    text(P2(i,1)+0.2,P2(i,2),secteurs{i})
+end
+title("ACP 2 - Apres traitement des -1")
+xlabel("Axe 1")
+ylabel("Axe 2")
 grid on
+hold off
+
+
+% ==============================
+% ACP 3 : Apres suppression des variables redondantes
+% ==============================
+
+% matrice de correlation pour detection redondance
+R = corrcoef(Xs);
+
+% ici on ne supprime rien par defaut
+colonnes_a_supprimer = [];
+
+X_reduit = Xs;
+X_reduit(:,colonnes_a_supprimer) = [];
+
+n = size(X_reduit,1);
+M = (X_reduit' * X_reduit)/(n-1);
+
+[E,D] = eig(M);
+[valeurs_propres, ordre] = sort(diag(D),"descend");
+E = E(:,ordre);
+
+P3 = X_reduit * E;
+
+figure
+scatter(P3(:,1),P3(:,2),60,"filled")
+hold on
+for i=1:length(secteurs)
+    text(P3(i,1)+0.2,P3(i,2),secteurs{i})
+end
+title("ACP 3 - Apres reduction des variables")
+xlabel("Axe 1")
+ylabel("Axe 2")
+grid on
+hold off
